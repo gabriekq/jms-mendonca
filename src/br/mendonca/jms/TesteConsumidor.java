@@ -1,5 +1,7 @@
 package br.mendonca.jms;
 
+import java.util.Enumeration;
+
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
@@ -7,6 +9,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
+import javax.jms.Queue;
+import javax.jms.QueueBrowser;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
@@ -24,10 +28,15 @@ public class TesteConsumidor {
         Session session = connection.createSession(false,Session.AUTO_ACKNOWLEDGE);
          
        Destination fila = (Destination) context.lookup("financeiro"); 
-       MessageConsumer consumer = session.createConsumer(fila);
+       QueueBrowser browser = session.createBrowser((Queue) fila);       //session.createConsumer(fila);
          
+       Enumeration msgs = browser.getEnumeration();
+       while (msgs.hasMoreElements()) { 
+           TextMessage msg = (TextMessage) msgs.nextElement(); 
+           System.out.println("Message: " + msg.getText()); 
+       }
       
-       consumer.setMessageListener(new MessageListener() {
+     /*  consumer.setMessageListener(new MessageListener() {
 		
 		@Override
 		public void onMessage(Message message) {
@@ -41,7 +50,7 @@ public class TesteConsumidor {
 		}
 			
 		}
-	});
+	});*/
        
        
        
