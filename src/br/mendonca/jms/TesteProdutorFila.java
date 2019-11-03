@@ -13,7 +13,7 @@ import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-public class TesteProdutor {
+public class TesteProdutorFila {
 
 	public static void main(String[] args) throws NamingException, JMSException {
 		

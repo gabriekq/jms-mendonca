@@ -13,10 +13,11 @@ import javax.jms.Queue;
 import javax.jms.QueueBrowser;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.jms.Topic;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-public class TesteConsumidor {
+public class TesteConsumidorTopicoEstoqueSelector {
 
 	public static void main(String[] args) throws NamingException,Exception {
 		
@@ -24,19 +25,17 @@ public class TesteConsumidor {
 		ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
 		
 		Connection connection = factory.createConnection();
-        connection.start(); 
+       connection.setClientID("estoque");
+		
+		connection.start(); 
         Session session = connection.createSession(false,Session.AUTO_ACKNOWLEDGE);
          
-       Destination fila = (Destination) context.lookup("financeiro"); 
-       QueueBrowser browser = session.createBrowser((Queue) fila);       //session.createConsumer(fila);
+       Topic topico = (Topic) context.lookup("loja"); 
+       // MessageConsumer consumer = session.createDurableSubscriber((Topic) topico,"assinatura");
          
-       Enumeration msgs = browser.getEnumeration();
-       while (msgs.hasMoreElements()) { 
-           TextMessage msg = (TextMessage) msgs.nextElement(); 
-           System.out.println("Message: " + msg.getText()); 
-       }
+       MessageConsumer consumer = session.createDurableSubscriber((Topic) topico,"assinatura-selector","ebook is null OR ebook=false",false);
       
-     /*  consumer.setMessageListener(new MessageListener() {
+      consumer.setMessageListener(new MessageListener() {
 		
 		@Override
 		public void onMessage(Message message) {
@@ -50,7 +49,7 @@ public class TesteConsumidor {
 		}
 			
 		}
-	});*/
+	});
        
        
        
