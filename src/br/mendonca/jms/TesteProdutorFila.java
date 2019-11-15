@@ -30,7 +30,7 @@ public class TesteProdutorFila {
       
        
       
-       for(int index =0 ; index < 1000;index++){
+       for(int index =0 ; index < 1;index++){
     	   Message message = session.createTextMessage("<pedido><id>Teste "+index+"</id></pedido>");
     	   producer.send(message); 
        }

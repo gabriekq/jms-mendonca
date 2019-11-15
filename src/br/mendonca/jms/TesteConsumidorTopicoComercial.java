@@ -1,5 +1,6 @@
 package br.mendonca.jms;
 
+import java.io.Serializable;
 import java.util.Enumeration;
 
 import javax.jms.Connection;
@@ -9,6 +10,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.QueueBrowser;
 import javax.jms.Session;
@@ -16,6 +18,8 @@ import javax.jms.TextMessage;
 import javax.jms.Topic;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+
+import br.com.caelum.modelo.Pedido;
 
 public class TesteConsumidorTopicoComercial {
 
@@ -40,10 +44,11 @@ public class TesteConsumidorTopicoComercial {
 		@Override
 		public void onMessage(Message message) {
 			
-		TextMessage textMessage = (TextMessage)message;	
+		ObjectMessage   objectMessage = (ObjectMessage )message;	
 		
 		try {
-			System.out.println("Recebendo : "+textMessage.getText());
+			Pedido pedido = (Pedido) objectMessage.getObject();
+			System.out.println("Recebendo : "+pedido.getCodigo());
 		} catch (JMSException e) {	
 			e.printStackTrace();
 		}
